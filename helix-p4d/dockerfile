@@ -1,0 +1,22 @@
+FROM ubuntu:16.04
+
+# install tools
+RUN apt-get update && apt-get install -y wget curl unzip dnsutils
+
+# install p4d
+# https://www.perforce.com/manuals/p4sag/Content/P4SAG/install.linux.packages.install.html
+RUN wget -q https://package.perforce.com/perforce.pubkey -O - | apt-key add -
+RUN echo 'deb http://package.perforce.com/apt/ubuntu trusty release' > /etc/apt/sources.list.d/perforce.list
+RUN apt-get update
+RUN apt-get install -y helix-p4d
+
+# configure p4d
+ADD ./helixp4d.conf /etc/perforce/p4dctl.conf.d/
+
+# Add the perforce user to the sudo group.
+RUN usermod -G sudo -a perforce
+RUN chown -R perforce /etc/perforce/
+
+
+EXPOSE 1666
+CMD ["p4d"]

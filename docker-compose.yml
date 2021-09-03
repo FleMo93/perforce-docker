@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  helix-p4d:
+    image: helix-p4d:latest
+    hostname: perforce
+    ports:
+      - "1666:1666"
+    volumes:
+      - /d/docker-data/volumes/perforce:/data
+    env_file:
+      - ./envfile
+
+volumes:
+  helixp4d: {}
